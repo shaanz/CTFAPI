@@ -1,0 +1,74 @@
+swagger: "2.0"
+info:
+  description: "API list for Wicher app internal only"  
+  version: "1.0.0"
+  title: "Swagger Witcher"
+host: "portal.witcher.sg"
+basePath: "/"
+schemes:
+- "http"
+
+paths:
+  /login:
+    post:
+      operationId: "login"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: body
+        name: uname
+        description: Username
+        required: true
+        type: "string"
+      - in: body
+        name: "passwd"
+        description: "Password "
+        required: true
+        type: "string"         
+      responses:
+        "200":
+          description: "Authentication Success"
+  /self/details/{uid}:
+     get:
+        operationId: "getdetails"
+        consumes:
+        - "application/json"
+        produces:
+        - "application/json"
+        responses:
+          "200":
+            description: "Invalid input"
+  /admin/v1:
+     get:
+        operationId: "getadmindetails"
+        consumes:
+        - "application/json"
+        produces:
+        - "application/json"
+        responses:
+          "200":
+            description: "Invalid input"
+  /witcher/addcredit/v3:
+     post:
+        operationId: "addcredit"
+        consumes:
+        - "application/json"
+        produces:
+        - "application/json"
+        parameters:
+        - in: "body"
+          name: "uname"
+          description: "Username "
+          required: true
+          type: "string"
+        - in: "body"
+          name: "Amount"
+          description: "Amount"
+          required: true
+          type: "string"  
+        responses:
+          "200":
+            description: "Operation Completed"
+          

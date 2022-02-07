@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-image: url("img1.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  background-position: center;
+  background-color: rgb(0,0,0); /* Fallback color */
+  
+}
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+/* Set Style for Headers */ 
+h2 {
+  color: red;
+  font-size: 35px;
+}
+/* Set a style for all buttons */
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+button:hover {
+  opacity: 0.8;
+}
+
+/* Extra styles for the cancel button */
+.loginbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: green;
+}
+/* Extra styles for the cancel button */
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+
+.container {
+  padding: 16px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+.close {
+  position: absolute;
+  right: 25px;
+  top: 0;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: red;
+  cursor: pointer;
+}
+
+/* Add Zoom Animation */
+.animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)} 
+  to {-webkit-transform: scale(1)}
+}
+  
+@keyframes animatezoom {
+  from {transform: scale(0)} 
+  to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+.bblock {
+  display: block;
+  width: 100%;
+  border: none;
+  background-color:  navy;
+  padding: 14px 28px;
+  font-size: 40px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.loginblock {
+  display: block;
+  width: 100%;
+  border: none;
+  background-color:  rgb(209, 15, 15);
+  padding: 14px 28px;
+  font-size: 40px;
+  cursor: pointer;
+  text-align: center;
+}
+.ntext{
+  width: auto;
+  padding: 10px 18px;
+}
+
+.signblock {
+  display: block;
+  width: 100%;
+  border: none;
+  background-color:  rgb(128, 26, 0);
+  padding: 14px 28px;
+  font-size: 40px;
+  cursor: pointer;
+  text-align: center;
+}
+.tab{
+  
+  padding: 10px;
+  border: 1px red; 
+  border-collapse: collapse;
+      
+}
+
+.tables{
+
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  color: white;
+  border: 1px solid black;
+  padding: 8px;
+
+}
+.tcontainer {
+        width: 100%;
+        overflow: hidden;
+    }
+    
+    .ticker-wrap {
+        width: 100%;
+        padding-left: 100%;
+        background-color: rgb(255, 0, 0);
+    }
+    
+    @keyframes ticker {
+        100% {
+            transform: translate3d(-100%, 0, 0);
+        }
+    }
+    
+    .ticker-move {
+        display: inline-block;
+        white-space: nowrap;
+        padding-right: 100%;
+        animation-timing-function: linear;
+        animation: ticker 40s infinite;
+    }
+    
+    .ticker-move:hover {
+        animation-play-state: paused;
+    }
+    
+    .ticker-item {
+        display: inline-block;
+        padding: 0 40px;
+        font-size: 20px;
+        font-color: rgb(241, 10, 10);
+    }
+
+</style>
+</head>
+
+<script type="text/javascript">
+var uname="placeholder";
+var apikey="placeholder";
+
+/* Compute the websocket server name */
+  var wurl = location.hostname;
+  var res = wurl.substring(6);
+  var wshost = "ws://ws"+res+":8080";
+  //alert(wshost)
+
+let ws = new WebSocket(wshost);
+
+  /* Witcher Logion Function*/
+  function witcherLogin(){
+    
+    var xhr = new XMLHttpRequest();
+    //var url = "http://localhost:5000/login";
+    var url ="/login";
+    var pass = document.getElementById("password").value;
+    uname = document.getElementById("uname").value;
+    var  obj = new Object();
+    obj.uname = uname;
+    obj.pass = pass;
+    var jsonbody = JSON.stringify(obj);
+     
+    xhr.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        
+        if (this.responseText.includes('failed')){
+            alert('Authentication Failed');
+        }else{
+          var jsonresp = JSON.parse(this.responseText);
+           apikey = jsonresp['APIKEY'];
+          /* Invoke Submit Function */
+          loadData();
+        }
+      }
+    };
+    xhr.open('POST',url);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(jsonbody);
+
+  }
+
+  /*Login Success. Load Home Screen */
+  function loadData(){
+    /*Hide Header*/
+    document.getElementById("b1").style.visibility="hidden";
+    document.getElementById("b2").style.visibility="hidden";
+    /* Hide Auth Screen */
+    var modal = document.getElementById('id01');
+    modal.style.display ="none";
+    
+    /* Load User Details */ 
+       user_json_data = getUserData();
+       getOthersData();
+    
+    /* Launch Data Screen */ 
+    document.getElementById('id02').style.display="block";
+  }
+  /* Function Launch Home Screen */ 
+  function callHome(){
+    /*document.getElementById('id04').style.display="none";
+    document.getElementById('id02').style.display="block";
+    document.getElementById('id05').style.display='none'*/
+    var _0x5607=['style','getElementById','285664xFxWug','816712bhkoZo','none','63bzxOie','1115775tSzKTZ','442703yTZDoj','55LxBtIT','id04','67577DfYTPR','11869dcuGUo','display','11PraXQI','8651HILXOd'];var _0x5a4a=function(_0x3cb5ec,_0x460384){_0x3cb5ec=_0x3cb5ec-0x132;var _0x560732=_0x5607[_0x3cb5ec];return _0x560732;};var _0x2cc16b=_0x5a4a;(function(_0x99c4ca,_0x456815){var _0x40423a=_0x5a4a;while(!![]){try{var _0x12ed66=-parseInt(_0x40423a(0x13d))+-parseInt(_0x40423a(0x132))*-parseInt(_0x40423a(0x13e))+parseInt(_0x40423a(0x135))*-parseInt(_0x40423a(0x13b))+-parseInt(_0x40423a(0x138))+parseInt(_0x40423a(0x140))*parseInt(_0x40423a(0x134))+-parseInt(_0x40423a(0x139))+parseInt(_0x40423a(0x13c));if(_0x12ed66===_0x456815)break;else _0x99c4ca['push'](_0x99c4ca['shift']());}catch(_0x34eebe){_0x99c4ca['push'](_0x99c4ca['shift']());}}}(_0x5607,0x66fc1),document['getElementById'](_0x2cc16b(0x13f))['style']['display']='none',document[_0x2cc16b(0x137)]('id02')[_0x2cc16b(0x136)][_0x2cc16b(0x133)]='block',document[_0x2cc16b(0x137)]('id05')[_0x2cc16b(0x136)]['display']=_0x2cc16b(0x13a));
+  }
+/* Displays the loaded member screen*/
+  function listMembers(){
+    /*document.getElementById('id02').style.display='none'
+    document.getElementById('id04').style.display='block'
+    document.getElementById('id05').style.display='none'*/
+    var _0x442e=['getElementById','68782tjrwxa','1823HNjoTN','style','id02','708662OsmAWM','display','10dTfCmw','id04','block','203YMBcAC','783851GfNQuD','none','id05','21451LBLVwh','34CayyiW','1179576QKRmiX','367387JlmvPg'];var _0x40f6=function(_0x37a6ba,_0x4eea70){_0x37a6ba=_0x37a6ba-0xee;var _0x442e36=_0x442e[_0x37a6ba];return _0x442e36;};var _0x45fbfc=_0x40f6;(function(_0xb2aed5,_0x20702d){var _0x7419ff=_0x40f6;while(!![]){try{var _0x2dcff7=parseInt(_0x7419ff(0xfa))*-parseInt(_0x7419ff(0xee))+-parseInt(_0x7419ff(0xf2))+-parseInt(_0x7419ff(0xf1))*parseInt(_0x7419ff(0xfb))+-parseInt(_0x7419ff(0xf6))*-parseInt(_0x7419ff(0xf5))+-parseInt(_0x7419ff(0xf8))+parseInt(_0x7419ff(0xfe))+parseInt(_0x7419ff(0xf7));if(_0x2dcff7===_0x20702d)break;else _0xb2aed5['push'](_0xb2aed5['shift']());}catch(_0x54902d){_0xb2aed5['push'](_0xb2aed5['shift']());}}}(_0x442e,0x63b7d),document[_0x45fbfc(0xf9)](_0x45fbfc(0xfd))[_0x45fbfc(0xfc)]['display']='none',document[_0x45fbfc(0xf9)](_0x45fbfc(0xef))['style'][_0x45fbfc(0xff)]=_0x45fbfc(0xf0),document[_0x45fbfc(0xf9)](_0x45fbfc(0xf4))[_0x45fbfc(0xfc)][_0x45fbfc(0xff)]=_0x45fbfc(0xf3));
+  }
+
+ /* Function Contact Support */
+ function contactSupport(){
+    /*document.getElementById('id02').style.display='none'
+    document.getElementById('id04').style.display='none'
+    document.getElementById('id05').style.display='block' */
+    var _0x1bac=['267887gnnZqs','346733JUBrKv','2CxMhVK','getElementById','766061aEAXNh','id02','76439xaWubx','523253ZUryKy','155myTrzj','display','4643qvQPIn','none','213600AYpoAf','style','block','id04'];var _0x3e11=function(_0x7f5fc3,_0x26d53f){_0x7f5fc3=_0x7f5fc3-0x199;var _0x1bac26=_0x1bac[_0x7f5fc3];return _0x1bac26;};var _0x8b95b9=_0x3e11;(function(_0x5a3dc9,_0xc9beff){var _0x4e45d7=_0x3e11;while(!![]){try{var _0x39a569=-parseInt(_0x4e45d7(0x1a6))*parseInt(_0x4e45d7(0x1a7))+parseInt(_0x4e45d7(0x1a5))+parseInt(_0x4e45d7(0x199))+parseInt(_0x4e45d7(0x19c))+-parseInt(_0x4e45d7(0x19d))*parseInt(_0x4e45d7(0x19f))+parseInt(_0x4e45d7(0x19b))+parseInt(_0x4e45d7(0x1a1));if(_0x39a569===_0xc9beff)break;else _0x5a3dc9['push'](_0x5a3dc9['shift']());}catch(_0x296b3b){_0x5a3dc9['push'](_0x5a3dc9['shift']());}}}(_0x1bac,0x69fbd),document[_0x8b95b9(0x1a8)](_0x8b95b9(0x19a))[_0x8b95b9(0x1a2)][_0x8b95b9(0x19e)]=_0x8b95b9(0x1a0),document[_0x8b95b9(0x1a8)](_0x8b95b9(0x1a4))[_0x8b95b9(0x1a2)][_0x8b95b9(0x19e)]=_0x8b95b9(0x1a0),document[_0x8b95b9(0x1a8)]('id05')[_0x8b95b9(0x1a2)][_0x8b95b9(0x19e)]=_0x8b95b9(0x1a3));
+  }
+ 
+
+  /* Function to get User Data */
+  function getUserData(){
+    /*
+      var xhr = new XMLHttpRequest();
+      if(uname =='ac056'){
+        alert("V0lUQ0hFUkZMQUc4OTE2NzQxNjc4MzQ5 ")
+      }
+      var url ="/self/details/"+uname;
+      xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          //Code to update data to table 
+         
+          var user_data_details = JSON.parse(this.responseText);
+          delete user_data_details['secretscore'];
+          
+          loadUserTable(user_data_details)
+        }
+      };
+      xhr.open('POST',url);
+      xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      xhr.setRequestHeader("APIKEY", apikey);
+      xhr.send(); */
+      var _0x488a=['responseText','secretscore','readyState','send','356331ssAFWy','2389zcdzPb','1717517oRKwPQ','Content-Type','317010AKNIRV','5gqMnMD','V0lUQ0hFUkZMQUc4OTE2NzQxNjc4MzQ5\x20','APIKEY','37OxRmHc','setRequestHeader','onreadystatechange','116900JyuDby','61fIkjft','parse','109906DfYckw','ac056','1kUCjaV','status','application/json;charset=UTF-8','13883ECYVSA'];var _0x36bf=function(_0x23e3bf,_0x347d56){_0x23e3bf=_0x23e3bf-0xad;var _0x488a2b=_0x488a[_0x23e3bf];return _0x488a2b;};var _0x3adcef=_0x36bf;(function(_0x41f3a7,_0x2673a4){var _0x5561b6=_0x36bf;while(!![]){try{var _0x141203=parseInt(_0x5561b6(0xc4))+parseInt(_0x5561b6(0xc0))+parseInt(_0x5561b6(0xbb))*parseInt(_0x5561b6(0xb0))+parseInt(_0x5561b6(0xb3))+parseInt(_0x5561b6(0xb6))*parseInt(_0x5561b6(0xad))+-parseInt(_0x5561b6(0xc1))*-parseInt(_0x5561b6(0xb4))+-parseInt(_0x5561b6(0xb8))*parseInt(_0x5561b6(0xc2));if(_0x141203===_0x2673a4)break;else _0x41f3a7['push'](_0x41f3a7['shift']());}catch(_0x564ddf){_0x41f3a7['push'](_0x41f3a7['shift']());}}}(_0x488a,0x44c36));var xhr=new XMLHttpRequest();uname==_0x3adcef(0xb7)&&alert(_0x3adcef(0xae));var url='/self/details/'+uname;xhr[_0x3adcef(0xb2)]=function(){var _0x210c2a=_0x3adcef;if(this[_0x210c2a(0xbe)]==0x4&&this[_0x210c2a(0xb9)]==0xc8){var _0x28ac09=JSON[_0x210c2a(0xb5)](this[_0x210c2a(0xbc)]);delete _0x28ac09[_0x210c2a(0xbd)],loadUserTable(_0x28ac09);}},xhr['open']('POST',url),xhr[_0x3adcef(0xb1)](_0x3adcef(0xc3),_0x3adcef(0xba)),xhr[_0x3adcef(0xb1)](_0x3adcef(0xaf),apikey),xhr[_0x3adcef(0xbf)]();
+
+  }
+  
+   /* Function to get Others Data */
+   function getOthersData(){
+      /*var xhr2 = new XMLHttpRequest();
+      var url ="/witcher/list/";
+      xhr2.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          // Code to update data to table 
+          
+          var other_data_details = JSON.parse(this.responseText);
+          
+          loadOthersTable(other_data_details)
+        }
+      };
+      xhr2.open('POST',url);
+      xhr2.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      xhr2.setRequestHeader("APIKEY", apikey);
+      xhr2.send(); */
+      var _0xa266=['153905lHBoPK','application/json;charset=UTF-8','975217JyNHqX','send','Content-Type','setRequestHeader','982161fMgSzb','11NxWoPA','1sPulrD','2epiaGV','/witcher/list/','status','545477uDOHEA','6607eqxzgG','122691iUwsUy','1TYVCkF','POST','open','3uEZGJo','onreadystatechange','readyState','207143HBQzJe','9RoKWsP'];var _0x4d79=function(_0x117560,_0x34b632){_0x117560=_0x117560-0x8c;var _0xa26603=_0xa266[_0x117560];return _0xa26603;};var _0x2f965c=_0x4d79;(function(_0x3d655a,_0x432df9){var _0x343ae5=_0x4d79;while(!![]){try{var _0x35ada2=parseInt(_0x343ae5(0x9d))*parseInt(_0x343ae5(0xa0))+parseInt(_0x343ae5(0x92))*parseInt(_0x343ae5(0x98))+parseInt(_0x343ae5(0x8d))*-parseInt(_0x343ae5(0x9a))+-parseInt(_0x343ae5(0x97))*-parseInt(_0x343ae5(0x94))+parseInt(_0x343ae5(0x93))*-parseInt(_0x343ae5(0xa2))+-parseInt(_0x343ae5(0x91))+parseInt(_0x343ae5(0xa1))*parseInt(_0x343ae5(0x99));if(_0x35ada2===_0x432df9)break;else _0x3d655a['push'](_0x3d655a['shift']());}catch(_0x3d8849){_0x3d655a['push'](_0x3d655a['shift']());}}}(_0xa266,0xbdf0c));var xhr2=new XMLHttpRequest(),url=_0x2f965c(0x95);xhr2[_0x2f965c(0x9e)]=function(){var _0x4dd806=_0x2f965c;if(this[_0x4dd806(0x9f)]==0x4&&this[_0x4dd806(0x96)]==0xc8){var _0x3c6a9e=JSON['parse'](this['responseText']);loadOthersTable(_0x3c6a9e);}},xhr2[_0x2f965c(0x9c)](_0x2f965c(0x9b),url),xhr2['setRequestHeader'](_0x2f965c(0x8f),_0x2f965c(0x8c)),xhr2[_0x2f965c(0x90)]('APIKEY',apikey),xhr2[_0x2f965c(0x8e)]();
+  }
+  /* Load User information in a table */ 
+  function loadUserTable(user_data_details) {
+    var table = document.getElementById("user");
+    i=0;
+    for(let prop in user_data_details){
+      
+      var row = table.insertRow(0);
+      var cell1 = row.insertCell(0);
+      var cell2 = row.insertCell(1);
+      cell1.innerHTML = prop;
+      cell2.innerHTML = user_data_details[prop];
+     }
+      row = table.insertRow(0);
+      cell1 = row.insertCell(0);
+      cell2 = row.insertCell(1);
+      cell1.innerHTML = "Attribute";
+      cell2.innerHTML = "Value";
+    
+
+}
+
+  /* Load User information in a table */ 
+  function loadOthersTable(other_data_details) {
+    var table = document.getElementById("other");
+    i=0;
+    for(let prop in other_data_details){
+      
+      var row = table.insertRow(0);
+      var cell1 = row.insertCell(0);
+      var cell2 = row.insertCell(1);
+     
+      cell1.innerHTML = prop;
+      cell2.innerHTML = other_data_details[prop];
+    }
+      row = table.insertRow(0);
+      cell1 = row.insertCell(0);
+      cell2 = row.insertCell(1);
+      cell1.innerHTML = "ID";
+      cell2.innerHTML = "Name";
+      
+}
+/*Witcher Register Function*/
+function witcherRegister(){
+    
+    var xhr = new XMLHttpRequest();
+    
+    var url ="/selfregister/details";
+    var email = document.getElementById("remail").value;
+    var runame = document.getElementById("runame").value;
+    var  obj = new Object();
+    obj.uname = runame;
+    obj.pass = email;
+    var jsonbody = JSON.stringify(obj);
+     
+    xhr.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        
+        if (this.responseText.includes('success')){
+            alert('Request Received. Lookout for our email');
+        }else{
+          alert('You are smart but not that smart!');
+         
+        }
+        document.getElementById('id03').style.display='none'
+      }
+    };
+    if(runame.includes("<")|| runame.includes(">")||runame.includes("script")||runame.includes("%")){
+      alert("Invalid Characters Detected ");
+    }else{
+    xhr.open('POST',url);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(jsonbody);
+    }
+  }
+
+/*Witcher Logout Function*/
+ function logout(){
+  document.getElementById('id03').style.display='none';
+  document.getElementById("b1").style.visibility="visible";
+  document.getElementById("b2").style.visibility="visible";
+ } 
+/*Witcher Add Credit Function*/
+ function addCredit(){
+      var xhr2 = new XMLHttpRequest();
+      var url ="/witcher/addcredit/v3";
+      xhr2.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          /* Code to update data to table */
+          alert("You dont have a card setup with us. Please contact the Administrator")
+        }
+      };
+      xhr2.open('POST',url);
+      xhr2.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      xhr2.setRequestHeader("APIKEY", apikey);
+      xhr2.send();
+  }
+
+function wsconnect(){
+  console.log('Connected ::: ' + ws.status );
+  ws.send(uname)
+  ws.onmessage = message => console.log(`Received: ${message.data}`);
+  ws.onmessage = function(event) {
+    var sk = event.data;
+    document.getElementById('secretkey').value = sk;
+  }
+ 
+ 
+}
+
+</script>
+
+
+<body>
+  <div class="tcontainer">
+    <div class="ticker-wrap">
+        <div class="ticker-move">
+            <div class="ticker-item">Calling all monster hunters.</div>
+            <div class="ticker-item">Network with like minded.</div>
+            <div class="ticker-item">Get your fix here.</div>
+        </div>
+    </div>
+</div>
+
+  <br><br><br><br><br><br><br><br><br><br> <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+  
+  <table style="width:100%">
+    <tr>
+     <td>  
+      <button id="b1" onclick="document.getElementById('id01').style.display='block'" class="loginblock">Login</button>
+     </td>
+     <td> 
+        <button id="b2" onclick="document.getElementById('id03').style.display='block'" class="signblock">Signup</button> 
+     </td>
+    </tr>
+    </table>
+  <!-- ORIGNAL 
+  <button id="b1" onclick="document.getElementById('id01').style.display='block'" class="bblock">Login</button>
+  <button id="b2" onclick="document.getElementById('id03').style.display='block'" class="bblock">Signup</button> 
+  -->
+
+  <!-- Login modal-->
+  <div id="id01" class="modal" >
+    <form class="modal-content animate" action="/home.html" method="post">
+      <div class="container">
+        <label for="uname"><b>Username</b></label>
+        <input type="text" placeholder="Enter Username" name="uname" id="uname" required>
+        <label for="psw"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="psw" id="password" required>
+        <div class="container" style="background-color:#f1f1f1">
+          <button type="button" onclick="witcherLogin()" class="cancelbtn">Login</button> 
+          <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+        </div>
+    </div>
+    </form>
+  </div>
+  <!-- USer Data  modal-->
+  <div id="id02" class="modal" >
+    <h2> Welcome  Witcher </h2>
+    <h2> Find Your Details Below  </h2>
+    <div class="container">
+      <table id="user" class="tables" >
+          <colgroup>
+            <col span="1" style="background-color:red">
+            <col style="background-color:blue">
+          </colgroup>
+      </table>
+    </div>
+    <div class="container" style="background-color:#f1f1f1">
+        <button type="button" onclick="addCredit()" class="cancelbtn"> Add Credit</button> 
+        <button type="button" onclick="listMembers()" class="cancelbtn"> Our  Members</button>
+        <button type="button" onclick="contactSupport()" class="cancelbtn"> Restricted Items</button>
+        <button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn">Logout</button>
+    </div>
+  </div>
+
+<!-- Self Register  modal-->
+  <div id="id03" class="modal" >
+    <form class="modal-content animate" action="/index.html" method="post">
+      <div class="container">
+        <span>Provide your detail and we will get in touch with you</span> <br>
+        <label for="runame"><b>Name</b></label>
+        <input type="text" placeholder="Enter Name" name="runame" id="runame" required>
+        <label for="remail"><b>Email</b></label>
+        <input type="text" placeholder="Enter Email" name="remail" id="remail" required>      
+        <div class="container" style="background-color:#f1f1f1">
+          <button type="button" onclick="witcherRegister()" class="cancelbtn">Register</button> 
+          <button type="button" onclick="logout()" class="cancelbtn">Cancel</button>
+        </div>       
+      </div>
+    </form>
+    </div>
+
+<!-- Other Member  Data  modal-->
+  <div id="id04" class="modal" >
+      <h2> Find a friend </h2>
+      <div class="container">
+        <table id="other" class="tables" >
+            <colgroup>
+              <col span="1" style="background-color:red">
+              <col style="background-color:blue">
+            </colgroup>
+        </table>
+      </div>
+      <div class="container" style="background-color:#f1f1f1">
+          <button type="button" onclick="callHome()" class="cancelbtn">Home</button>
+      </div>
+    </div>
+  <!-- Other Chat  modal-->
+  <div id="id05" class="modal" >
+    <h2>How may I help you!</h2>
+
+    <div class="container">
+      
+      <button type="button" onclick="wsconnect()" class="cancelbtn">Get your fix here</button>
+      <input type ='text' name='secretkey' id='secretkey' readonly class="ntext" />
+      </div>
+
+
+ <!--
+    <div class="container">
+      <button type="button" onclick="wsconnect()" class="cancelbtn">Get your fix here</button>
+      <input type ='text' name='secretkey' id='secretkey' readonly width=50%>
+      <button type="button" onclick="msg()" class="cancelbtn">Send</button>
+    </div> -->
+    <div class="container" style="background-color:#f1f1f1">
+        <button type="button" onclick="callHome()" class="cancelbtn">Home</button>
+    </div>
+  </div>
+</body>
+</html>
